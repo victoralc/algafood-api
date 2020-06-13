@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright 2007-present the original author or authors.
+=======
+ * Copyright 2012-2019 the original author or authors.
+>>>>>>> 19a6735e0f851be4c18c74d9cefcb2cce90dcf72
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +24,11 @@ import java.util.Properties;
 
 public class MavenWrapperDownloader {
 
+<<<<<<< HEAD
     private static final String WRAPPER_VERSION = "0.5.6";
+=======
+    private static final String WRAPPER_VERSION = "0.5.5";
+>>>>>>> 19a6735e0f851be4c18c74d9cefcb2cce90dcf72
     /**
      * Default URL to download the maven-wrapper.jar from, if no 'downloadUrl' is provided.
      */
