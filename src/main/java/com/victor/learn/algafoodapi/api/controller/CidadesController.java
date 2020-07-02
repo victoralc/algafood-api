@@ -1,7 +1,5 @@
 package com.victor.learn.algafoodapi.api.controller;
 
-import com.victor.learn.algafoodapi.domain.exception.EntidadeEmUsoException;
-import com.victor.learn.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.victor.learn.algafoodapi.domain.model.Cidade;
 import com.victor.learn.algafoodapi.domain.service.CadastroCidadesService;
 import org.springframework.beans.BeanUtils;
@@ -32,43 +30,26 @@ public class CidadesController {
     }
 
     @GetMapping("/{cidadeId}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Long cidadeId){
-        try {
-            Cidade encontrada = cadastroCidadesService.buscarPorId(cidadeId);
-            return ResponseEntity.ok(encontrada);
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public Cidade buscarPorId(@PathVariable Long cidadeId) {
+        return cadastroCidadesService.buscarPorId(cidadeId);
     }
 
     @PostMapping
-    public ResponseEntity<Cidade> adicionar(@RequestBody Cidade estado) {
-        estado = cadastroCidadesService.adicionar(estado);
-        return ResponseEntity.status(HttpStatus.CREATED).body(estado);
+    public ResponseEntity<Cidade> adicionar(@RequestBody Cidade cidade) {
+        cidade = cadastroCidadesService.salvar(cidade);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
     }
 
     @PutMapping("/{cidadeId}")
-    public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody Cidade estado) {
-        try {
-            Cidade encontrado = cadastroCidadesService.buscarPorId(cidadeId);
-            BeanUtils.copyProperties(estado, encontrado, "id");
-            Cidade atualizado = cadastroCidadesService.adicionar(encontrado);
-            return ResponseEntity.ok(atualizado);
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
+        Cidade encontrada = cadastroCidadesService.buscarPorId(cidadeId);
+        BeanUtils.copyProperties(cidade, encontrada, "id");
+        return cadastroCidadesService.salvar(encontrada);
     }
 
     @DeleteMapping("/{cidadeId}")
-    public ResponseEntity<Cidade> remove(@PathVariable Long cidadeId) {
-        try {
-            cadastroCidadesService.remover(cidadeId);
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public void remove(@PathVariable Long cidadeId) {
+        cadastroCidadesService.remover(cidadeId);
     }
 
 }

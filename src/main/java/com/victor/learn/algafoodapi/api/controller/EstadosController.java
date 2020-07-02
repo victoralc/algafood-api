@@ -2,10 +2,7 @@ package com.victor.learn.algafoodapi.api.controller;
 
 import com.victor.learn.algafoodapi.domain.exception.EntidadeEmUsoException;
 import com.victor.learn.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
-import com.victor.learn.algafoodapi.domain.model.Cozinha;
 import com.victor.learn.algafoodapi.domain.model.Estado;
-import com.victor.learn.algafoodapi.domain.model.Restaurante;
-import com.victor.learn.algafoodapi.domain.repository.EstadoRepository;
 import com.victor.learn.algafoodapi.domain.service.CadastroEstadosService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.ResponseExtractor;
 
-import javax.xml.ws.Response;
 import java.util.List;
 
 @RestController
@@ -33,14 +27,14 @@ public class EstadosController {
     private CadastroEstadosService service;
 
     @GetMapping
-    public List<Estado> listar(){
+    public List<Estado> listar() {
         return this.service.listarTodos();
     }
 
     @GetMapping("/{estadoId}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Long estadoId){
+    public ResponseEntity<?> buscarPorId(@PathVariable Long estadoId) {
         try {
-            Estado encontrado = service.buscarPorId(estadoId);
+            Estado encontrado = service.buscarOuFalhar(estadoId);
             return ResponseEntity.ok(encontrado);
         } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
@@ -56,7 +50,7 @@ public class EstadosController {
     @PutMapping("/{estadoId}")
     public ResponseEntity<?> atualizar(@PathVariable Long estadoId, @RequestBody Estado estado) {
         try {
-            Estado encontrado = service.buscarPorId(estadoId);
+            Estado encontrado = service.buscarOuFalhar(estadoId);
             BeanUtils.copyProperties(estado, encontrado, "id");
             Estado atualizado = service.adicionar(encontrado);
             return ResponseEntity.ok(atualizado);
