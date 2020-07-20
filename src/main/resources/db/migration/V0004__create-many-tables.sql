@@ -1,0 +1,136 @@
+create table payment_type
+(
+    id        bigint      not null auto_increment,
+    description varchar(60) not null,
+    primary key (id)
+) engine = InnoDB
+  default charset = utf8;
+
+create table group
+(
+    id   bigint      not null auto_increment,
+    name varchar(60) not null,
+
+    primary key (id)
+) engine = InnoDB
+  default charset = utf8;
+
+create table group_permission
+(
+    group_id     bigint not null,
+    permission_id bigint not null,
+
+    primary key (group_id, permission_id)
+) engine = InnoDB
+  default charset = utf8;
+
+create table permission
+(
+    id        bigint       not null auto_increment,
+    description varchar(60)  not null,
+    name      varchar(100) not null,
+
+    primary key (id)
+) engine = InnoDB
+  default charset = utf8;
+
+create table product
+(
+    id             bigint         not null auto_increment,
+    restaurant_id  bigint         not null,
+    name           varchar(80)    not null,
+    description    text           not null,
+    price          decimal(10, 2) not null,
+    iActive        tinyint(1)     not null,
+
+    primary key (id)
+) engine = InnoDB
+  default charset = utf8;
+
+create table restaurant
+(
+    id                   bigint         not null auto_increment,
+    cuisine_id           bigint         not null,
+    name                 varchar(80)    not null,
+    delivery_tax         decimal(10, 2) not null,
+    update_date          datetime       not null,
+    register_date        datetime       not null,
+
+    address_city_id   bigint,
+    address_zipcode         varchar(9),
+    address_name  varchar(100),
+    address_number      varchar(20),
+    address_additional varchar(60),
+    address_neighbour      varchar(60),
+
+    primary key (id)
+) engine = InnoDB
+  default charset = utf8;
+
+create table restaurant_payment_type
+(
+    restaurant_id     bigint not null,
+    payment_type_id bigint not null,
+
+    primary key (restaurant_id, payment_type_id)
+) engine = InnoDB
+  default charset = utf8;
+
+create table user
+(
+    id            bigint       not null auto_increment,
+    name          varchar(80)  not null,
+    email         varchar(255) not null,
+    password         varchar(255) not null,
+    creation_date datetime     not null,
+
+    primary key (id)
+) engine = InnoDB
+  default charset = utf8;
+
+create table user_group
+(
+    user_id bigint not null,
+    group_id   bigint not null,
+
+    primary key (user_id, group_id)
+) engine = InnoDB
+  default charset = utf8;
+
+
+
+alter table group_permission
+    add constraint fk_group_permission
+        foreign key (permission_id) references permission (id);
+
+alter table group_permission
+    add constraint fk_grupo_permissao_group
+        foreign key (group_id) references group (id);
+
+alter table product
+    add constraint fk_produto_restaurante
+        foreign key (restaurant_id) references restaurant (id);
+
+alter table restaurant
+    add constraint fk_cuisine_restaurant
+        foreign key (cuisine_id) references cuisine (id);
+
+alter table restaurant
+    add constraint fk_restaurante_cidade
+        foreign key (address_city_id) references city (id);
+
+alter table restaurant_payment_type
+    add constraint fk_rest_forma_pagto_forma_pagto
+        foreign key (payment_type_id) references payment_type (id);
+
+alter table restaurant_payment_type
+    add constraint fk_restaurant_payment_type
+        foreign key (restaurant_id) references restaurant (id);
+
+alter table user_group
+    add constraint fk_usuario_grupo_grupo
+        foreign key (group_id) references group (id);
+
+alter table user_group
+    add constraint fk_usuario_grupo_usuario
+        foreign key (user_id) references user (id);

@@ -8,15 +8,15 @@ import javax.xml.bind.annotation.XmlType;
 public class Customer {
 
     private String firstName;
-    private String last_name;
+    private String lastName;
     private int id;
 
     public Customer() {
     }
 
-    public Customer(String firstName, String last_name, int id) {
+    public Customer(String firstName, String lastName, int id) {
         this.firstName = firstName;
-        this.last_name = last_name;
+        this.lastName = lastName;
         this.id = id;
     }
 
@@ -29,11 +29,11 @@ public class Customer {
     }
 
     public String getLastName() {
-        return last_name;
+        return lastName;
     }
 
     public void setLastName(String last_name) {
-        this.last_name = last_name;
+        this.lastName = last_name;
     }
 
     public int getID() {
