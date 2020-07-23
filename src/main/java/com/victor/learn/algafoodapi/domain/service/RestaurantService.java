@@ -23,7 +23,7 @@ public class RestaurantService {
 
     public Restaurant save(Restaurant restaurant) {
         Long cuisineId = restaurant.getCuisine().getId();
-        Cuisine found = cuisineService.findOrFail(cuisineId);
+        Cuisine found = cuisineService.findById(cuisineId);
         restaurant.setCuisine(found);
         return restaurantRepository.save(restaurant);
     }

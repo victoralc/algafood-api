@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface CuisineRepository extends JpaRepository<Cuisine, Long> {
 
-    Optional<Cuisine> findByNameContaining(String nome);
+    Optional<Cuisine> findByNameContaining(String name);
     
 }

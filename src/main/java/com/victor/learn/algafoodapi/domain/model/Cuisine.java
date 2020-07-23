@@ -24,10 +24,10 @@ public class Cuisine {
     private Long id;
 
     @Column(nullable = false)
-    private String nome;
+    private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "cozinha")
+    @OneToMany(mappedBy = "cuisine")
     private List<Restaurant> restaurants = new ArrayList<>();
 
 }

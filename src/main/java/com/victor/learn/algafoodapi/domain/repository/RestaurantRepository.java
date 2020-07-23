@@ -17,8 +17,5 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     
     List<Restaurant> findByDeliveryTaxBetween(BigDecimal initialTax, BigDecimal finalTax);
     
-    //@Query("from Restaurant where nome like %:nome% and cuisine.id = :id")
-    List<Restaurant> findByName(@Param("name") String name, @Param("id") Long cuisine);
-
-    List<Restaurant> find(String name, BigDecimal initialTax, BigDecimal finalTax);
+    List<Restaurant> findByNameAndCuisine(@Param("name") String name, @Param("id") Long cuisine);
 }

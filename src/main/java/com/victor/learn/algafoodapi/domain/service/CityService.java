@@ -2,9 +2,7 @@ package com.victor.learn.algafoodapi.domain.service;
 
 import com.victor.learn.algafoodapi.domain.exception.CityNotFoundException;
 import com.victor.learn.algafoodapi.domain.exception.EntityInUseException;
-import com.victor.learn.algafoodapi.domain.exception.EntityNotFoundException;
 import com.victor.learn.algafoodapi.domain.model.City;
-import com.victor.learn.algafoodapi.domain.model.Cuisine;
 import com.victor.learn.algafoodapi.domain.model.State;
 import com.victor.learn.algafoodapi.domain.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +34,7 @@ public class CityService {
 
     public City save(City city) {
         Long stateId = city.getState().getId();
-        State state = stateService.findOrFail(stateId);
+        State state = stateService.findById(stateId);
         city.setState(state);
         return cityRepository.save(city);
     }

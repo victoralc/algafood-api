@@ -1,19 +1,16 @@
 create table payment_type
 (
-    id        bigint      not null auto_increment,
+    id bigint not null auto_increment,
     description varchar(60) not null,
     primary key (id)
-) engine = InnoDB
-  default charset = utf8;
+) engine = InnoDB default charset = utf8;
 
-create table group
-(
-    id bigint not null auto_increment,
-    name varchar(60) not null,
+create table tbl_group (
+   id bigint not null auto_increment,
+   name varchar(60) not null,
 
-    primary key (id)
-) engine = InnoDB
-  default charset = utf8;
+   primary key (id)
+) engine = InnoDB default charset = utf8;
 
 create table group_permission
 (
@@ -21,8 +18,7 @@ create table group_permission
     permission_id bigint not null,
 
     primary key (group_id, permission_id)
-) engine = InnoDB
-  default charset = utf8;
+) engine = InnoDB default charset = utf8;
 
 create table permission
 (
@@ -103,7 +99,7 @@ alter table group_permission
 
 alter table group_permission
     add constraint fk_group_permission_group
-        foreign key (group_id) references group (id);
+        foreign key (group_id) references tbl_group (id);
 
 alter table product
     add constraint fk_product_restaurant
@@ -127,7 +123,7 @@ alter table restaurant_payment_type
 
 alter table user_group
     add constraint fk_user_group_group
-        foreign key (group_id) references group (id);
+        foreign key (group_id) references tbl_group (id);
 
 alter table user_group
     add constraint fk_user_group_user

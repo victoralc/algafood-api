@@ -18,9 +18,9 @@ public class CuisineService {
     @Autowired
     private CuisineRepository cuisineRepository;
 
-    public Cuisine findOrFail(Long cuisineId) {
+    public Cuisine findById(Long cuisineId) {
         return cuisineRepository.findById(cuisineId)
-                .orElseThrow(() -> new CityNotFoundException(cuisineId));
+                .orElseThrow(() -> new CuisineNotFoundException(cuisineId));
     }
 
     public Cuisine save(Cuisine cuisine) {

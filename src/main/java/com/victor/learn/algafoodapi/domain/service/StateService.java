@@ -20,7 +20,7 @@ public class StateService {
     @Autowired
     private StateRepository stateRepository;
 
-    public State findOrFail(Long stateId) {
+    public State findById(Long stateId) {
         return stateRepository.findById(stateId)
                 .orElseThrow(() -> new StateNotFoundException(stateId));
     }

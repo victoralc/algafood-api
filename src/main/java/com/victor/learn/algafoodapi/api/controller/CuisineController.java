@@ -37,7 +37,7 @@ public class CuisineController {
 
     @GetMapping("/{cuisineId}")
     public Cuisine find(@PathVariable("cuisineId") Long id) {
-        return cuisineService.findOrFail(id);
+        return cuisineService.findById(id);
     }
 
     @GetMapping("/by-name/{cuisineName}")
@@ -57,9 +57,9 @@ public class CuisineController {
 
     @PutMapping("/{cuisineId}")
     public Cuisine update(@PathVariable Long cuisineId, @RequestBody Cuisine cuisine) {
-        Cuisine actual = cuisineService.findOrFail(cuisineId);
+        Cuisine actual = cuisineService.findById(cuisineId);
         BeanUtils.copyProperties(cuisine, actual, "id");
-        return  cuisineRepository.save(actual);
+        return cuisineRepository.save(actual);
     }
 
     @DeleteMapping("/{cuisineId}")

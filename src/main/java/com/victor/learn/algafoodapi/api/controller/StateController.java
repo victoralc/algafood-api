@@ -1,7 +1,6 @@
 package com.victor.learn.algafoodapi.api.controller;
 
 import com.victor.learn.algafoodapi.domain.exception.EntityInUseException;
-import com.victor.learn.algafoodapi.domain.exception.EntityNotFoundException;
 import com.victor.learn.algafoodapi.domain.exception.StateNotFoundException;
 import com.victor.learn.algafoodapi.domain.model.State;
 import com.victor.learn.algafoodapi.domain.service.StateService;
@@ -35,7 +34,7 @@ public class StateController {
     @GetMapping("/{stateId}")
     public ResponseEntity<?> findById(@PathVariable Long stateId) {
         try {
-            State found = service.findOrFail(stateId);
+            State found = service.findById(stateId);
             return ResponseEntity.ok(found);
         } catch (StateNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -51,7 +50,7 @@ public class StateController {
     @PutMapping("/{stateId}")
     public ResponseEntity<?> update(@PathVariable Long stateId, @RequestBody State state) {
         try {
-            State found = service.findOrFail(stateId);
+            State found = service.findById(stateId);
             BeanUtils.copyProperties(state, found, "id");
             State updated = service.create(found);
             return ResponseEntity.ok(updated);
