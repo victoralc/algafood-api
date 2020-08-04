@@ -1,6 +1,9 @@
 package com.victor.learn.algafoodapi.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.victor.learn.algafoodapi.api.validation.DeliveryTax;
+import com.victor.learn.algafoodapi.api.validation.DeliveryTaxFreeOnDescription;
+import com.victor.learn.algafoodapi.domain.validations.groups.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,11 +20,21 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@DeliveryTaxFreeOnDescription(fieldValue = "deliveryTax", 
+                              fieldDescription = "name", 
+                              requiredDescription = "Delivery Tax Free")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -31,13 +44,19 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
-
+    
+    @NotBlank
     @Column(nullable = false)
     private String name;
 
+    @NotNull
+    @PositiveOrZero
     @Column(name = "delivery_tax", nullable = false)
     private BigDecimal deliveryTax;
     
+    @Valid
+    @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "cuisine_id", nullable = false)
     private Cuisine cuisine;
@@ -54,7 +73,7 @@ public class Restaurant {
     
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private LocalDateTime creationDate;
+    private LocalDateTime registerDate;
 
     @UpdateTimestamp
     @Column(nullable = false, columnDefinition = "datetime")

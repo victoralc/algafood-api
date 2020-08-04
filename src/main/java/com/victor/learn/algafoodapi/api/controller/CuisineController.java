@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,13 +51,13 @@ public class CuisineController {
     }
 
     @PostMapping
-    public ResponseEntity<Cuisine> create(@RequestBody Cuisine cuisine) {
+    public ResponseEntity<Cuisine> create(@RequestBody @Valid Cuisine cuisine) {
         Cuisine created = cuisineService.save(cuisine);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{cuisineId}")
-    public Cuisine update(@PathVariable Long cuisineId, @RequestBody Cuisine cuisine) {
+    public Cuisine update(@PathVariable Long cuisineId, @RequestBody @Valid Cuisine cuisine) {
         Cuisine actual = cuisineService.findById(cuisineId);
         BeanUtils.copyProperties(cuisine, actual, "id");
         return cuisineRepository.save(actual);

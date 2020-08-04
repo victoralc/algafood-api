@@ -27,7 +27,7 @@ public class CityService {
         return cityRepository.findAll();
     }
 
-    public City findOrFail(Long cityId) {
+    public City findById(Long cityId) {
         return cityRepository.findById(cityId)
                 .orElseThrow(() -> new CityNotFoundException(cityId));
     }
@@ -37,10 +37,6 @@ public class CityService {
         State state = stateService.findById(stateId);
         city.setState(state);
         return cityRepository.save(city);
-    }
-    
-    public City findById(Long cityId) {
-        return cityRepository.findById(cityId).orElseThrow(() -> new CityNotFoundException(cityId));
     }
 
     public void remover(Long cityId) {

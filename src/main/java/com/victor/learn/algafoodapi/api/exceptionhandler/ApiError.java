@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
@@ -17,4 +18,12 @@ public class ApiError {
     private String detail;
     private String userMessage;
     private LocalDateTime timestamp;
+    private List<Object> objects;
+    
+    @Builder
+    @Getter
+    public static class Object {
+        private String name;
+        private String userMessage;
+    }
 }

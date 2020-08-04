@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
@@ -43,13 +44,13 @@ public class RestaurantController {
     private RestaurantService restaurantService;
 
     @GetMapping
-    public List<Restaurant> listar() {
+    public List<Restaurant> listAll() {
         List<Restaurant> restaurants = restaurantRepository.findAll();
         return restaurants;
     }
 
     @GetMapping("/{restaurantId}")
-    public ResponseEntity<Restaurant> buscarPorId(@PathVariable Long restaurantId) {
+    public ResponseEntity<Restaurant> findById(@PathVariable Long restaurantId) {
         Optional<Restaurant> found = restaurantRepository.findById(restaurantId);
         if (found.isPresent()) {
             return ResponseEntity.ok(found.get());
@@ -59,7 +60,7 @@ public class RestaurantController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> create(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<?> create(@RequestBody @Valid Restaurant restaurant) {
         try {
             restaurant = restaurantService.save(restaurant);
             return ResponseEntity.status(HttpStatus.CREATED).body(restaurant);
@@ -69,7 +70,7 @@ public class RestaurantController {
     }
 
     @PutMapping("/{restaurantId}")
-    public Restaurant update(@PathVariable Long restaurantId, @RequestBody Restaurant restaurant) {
+    public Restaurant update(@PathVariable Long restaurantId, @RequestBody @Valid Restaurant restaurant) {
         Restaurant actual = restaurantService.findOrFail(restaurantId);
         BeanUtils.copyProperties(restaurant, actual, "id", "paymentType", "address", "creationDate", "products");
         try {
@@ -102,11 +103,11 @@ public class RestaurantController {
             objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
             Restaurant origin = objectMapper.convertValue(fields, Restaurant.class);
-            
+
             fields.forEach((propertyName, propertyValue) -> {
                 Field field = ReflectionUtils.findField(Restaurant.class, propertyName);
                 field.setAccessible(true);
-    
+
                 Object newValue = ReflectionUtils.getField(field, origin);
                 ReflectionUtils.setField(field, target, newValue);
             });
