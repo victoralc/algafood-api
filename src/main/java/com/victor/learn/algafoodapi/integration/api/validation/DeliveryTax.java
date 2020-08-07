@@ -1,4 +1,4 @@
-package com.victor.learn.algafoodapi.api.validation;
+package com.victor.learn.algafoodapi.integration.api.validation;
 
 import javax.validation.Constraint;
 import javax.validation.OverridesAttribute;

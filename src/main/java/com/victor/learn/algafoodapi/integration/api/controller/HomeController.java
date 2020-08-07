@@ -1,4 +1,4 @@
-package com.victor.learn.algafoodapi.api.controller;
+package com.victor.learn.algafoodapi.integration.api.controller;
 
 import com.victor.learn.algafoodapi.domain.model.Customer;
 import org.springframework.http.MediaType;

@@ -1,4 +1,4 @@
-package com.victor.learn.algafoodapi.api.controller;
+package com.victor.learn.algafoodapi.integration.api.controller;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

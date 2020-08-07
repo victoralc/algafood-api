@@ -1,4 +1,4 @@
-package com.victor.learn.algafoodapi.api.exceptionhandler;
+package com.victor.learn.algafoodapi.integration.api.exceptionhandler;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

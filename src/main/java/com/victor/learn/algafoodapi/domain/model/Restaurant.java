@@ -1,8 +1,7 @@
 package com.victor.learn.algafoodapi.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.victor.learn.algafoodapi.api.validation.DeliveryTax;
-import com.victor.learn.algafoodapi.api.validation.DeliveryTaxFreeOnDescription;
+import com.victor.learn.algafoodapi.integration.api.validation.DeliveryTaxFreeOnDescription;
 import com.victor.learn.algafoodapi.domain.validations.groups.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +20,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.Valid;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
