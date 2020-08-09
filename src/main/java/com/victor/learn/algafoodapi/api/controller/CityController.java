@@ -1,4 +1,4 @@
-package com.victor.learn.algafoodapi.integration.api.controller;
+package com.victor.learn.algafoodapi.api.controller;
 
 import com.victor.learn.algafoodapi.domain.exception.BusinessException;
 import com.victor.learn.algafoodapi.domain.exception.StateNotFoundException;

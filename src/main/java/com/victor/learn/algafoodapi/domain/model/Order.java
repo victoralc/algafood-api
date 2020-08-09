@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,11 +40,11 @@ public class Order {
     private OrderStatus status;
 
     @CreationTimestamp
-    private LocalDateTime creationDate;
+    private OffsetDateTime creationDate;
 
-    private LocalDateTime confirmationDate;
-    private LocalDateTime cancelDate;
-    private LocalDateTime deliveryDate;
+    private OffsetDateTime confirmationDate;
+    private OffsetDateTime cancelDate;
+    private OffsetDateTime deliveryDate;
 
     @ManyToOne
     @JoinColumn(nullable = false)

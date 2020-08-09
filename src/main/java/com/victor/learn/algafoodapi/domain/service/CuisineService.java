@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CuisineService {
@@ -17,16 +18,18 @@ public class CuisineService {
 
     @Autowired
     private CuisineRepository cuisineRepository;
-
+    
     public Cuisine findById(Long cuisineId) {
         return cuisineRepository.findById(cuisineId)
                 .orElseThrow(() -> new CuisineNotFoundException(cuisineId));
     }
 
+    @Transactional
     public Cuisine save(Cuisine cuisine) {
         return cuisineRepository.save(cuisine);
     }
 
+    @Transactional
     public void remove(Long cuisineId) {
         try {
             cuisineRepository.deleteById(cuisineId);

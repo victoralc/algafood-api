@@ -1,4 +1,4 @@
-package com.victor.learn.algafoodapi.integration.api.exceptionhandler;
+package com.victor.learn.algafoodapi.api.exceptionhandler;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -26,7 +26,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,7 +79,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private ApiError.ApiErrorBuilder createApiErrorBuilder(HttpStatus status, ApiErrorType apiErrorType, String detail) {
         return ApiError.builder()
                 .status(status.value())
-                .timestamp(LocalDateTime.now())
+                .timestamp(OffsetDateTime.now())
                 .type(apiErrorType.getUri())
                 .title(apiErrorType.getTitle())
                 .detail(detail);
@@ -124,14 +124,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         if (body == null) {
             body = ApiError.builder()
                     .title(status.getReasonPhrase())
-                    .timestamp(LocalDateTime.now())
+                    .timestamp(OffsetDateTime.now())
                     .status(status.value())
                     .userMessage(SYSTEM_ERROR_MESSAGE)
                     .build();
         } else if (body instanceof String) {
             body = ApiError.builder()
                     .title((String) body)
-                    .timestamp(LocalDateTime.now())
+                    .timestamp(OffsetDateTime.now())
                     .status(status.value())
                     .userMessage(SYSTEM_ERROR_MESSAGE)
                     .build();
@@ -206,7 +206,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
     
     @ExceptionHandler({ValidationException.class})
-    public ResponseEntity<Object> handleValidacaoException(ValidationException ex, WebRequest request) {
+    public ResponseEntity<Object> handleValidationException(ValidationException ex, WebRequest request) {
         return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(),
                 HttpStatus.BAD_REQUEST, request);
     }

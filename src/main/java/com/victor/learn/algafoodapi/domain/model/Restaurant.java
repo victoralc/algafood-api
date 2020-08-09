@@ -1,7 +1,8 @@
 package com.victor.learn.algafoodapi.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.victor.learn.algafoodapi.integration.api.validation.DeliveryTaxFreeOnDescription;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.victor.learn.algafoodapi.api.validation.DeliveryTaxFreeOnDescription;
 import com.victor.learn.algafoodapi.domain.validations.groups.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,7 +27,7 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class Restaurant {
     @Column(name = "delivery_tax", nullable = false)
     private BigDecimal deliveryTax;
     
+    @JsonIgnoreProperties(value = "name", allowGetters = true)
     @Valid
     @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
     @NotNull
@@ -59,6 +61,7 @@ public class Restaurant {
     @JoinColumn(name = "cuisine_id", nullable = false)
     private Cuisine cuisine;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "restaurant_payment_type",
             joinColumns = @JoinColumn(name = "restaurant_id"),
@@ -71,11 +74,11 @@ public class Restaurant {
     
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private LocalDateTime registerDate;
+    private OffsetDateTime registerDate;
 
     @UpdateTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private LocalDateTime updateDate;
+    private OffsetDateTime  updateDate;
     
     @JsonIgnore
     @OneToMany(mappedBy = "restaurant")

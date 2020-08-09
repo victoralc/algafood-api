@@ -1,4 +1,4 @@
-package com.victor.learn.algafoodapi.integration.api;
+package com.victor.learn.algafoodapi.api;
 
 import com.victor.learn.algafoodapi.domain.model.Cuisine;
 import com.victor.learn.algafoodapi.domain.repository.CuisineRepository;

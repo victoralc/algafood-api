@@ -1,4 +1,4 @@
-package com.victor.learn.algafoodapi.integration.components;
+package com.victor.learn.algafoodapi.integration.components.service;
 
 import com.victor.learn.algafoodapi.domain.exception.EntityInUseException;
 import com.victor.learn.algafoodapi.domain.exception.EntityNotFoundException;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class CuisineRegistrationIT {
+class CuisineServiceIT {
 
     @Autowired
     private CuisineService cuisineService;

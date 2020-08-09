@@ -1,4 +1,4 @@
-package com.victor.learn.algafoodapi.integration.api.exceptionhandler;
+package com.victor.learn.algafoodapi.api.exceptionhandler;
 
 import lombok.Getter;
 

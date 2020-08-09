@@ -1,4 +1,4 @@
-package com.victor.learn.algafoodapi.integration.api.validation;
+package com.victor.learn.algafoodapi.api.validation;
 
 import org.springframework.beans.BeanUtils;
 
