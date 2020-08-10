@@ -1,4 +1,4 @@
-package com.victor.learn.algafoodapi.api.model.input;
+package com.victor.learn.algafoodapi.api.model.input.cuisine;
 
 import lombok.Getter;
 import lombok.Setter;

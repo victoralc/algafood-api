@@ -1,6 +1,11 @@
 package com.victor.learn.algafoodapi.api.controller;
 
+import com.victor.learn.algafoodapi.api.model.CityModel;
+import com.victor.learn.algafoodapi.api.model.assembler.CityInputDisassembler;
+import com.victor.learn.algafoodapi.api.model.assembler.CityModelAssembler;
+import com.victor.learn.algafoodapi.api.model.input.city.CityInput;
 import com.victor.learn.algafoodapi.domain.exception.BusinessException;
+import com.victor.learn.algafoodapi.domain.exception.EntityNotFoundException;
 import com.victor.learn.algafoodapi.domain.exception.StateNotFoundException;
 import com.victor.learn.algafoodapi.domain.model.City;
 import com.victor.learn.algafoodapi.domain.service.CityService;
@@ -26,36 +31,48 @@ public class CityController {
 
     @Autowired
     private CityService cityService;
+    
+    @Autowired
+    private CityModelAssembler cityModelAssembler;
+    
+    @Autowired
+    private CityInputDisassembler cityInputDisassembler;
 
     @GetMapping
-    public List<City> list(){
-        return this.cityService.listAll();
+    public List<CityModel> list(){
+        List<City> cities = this.cityService.listAll();
+        return cityModelAssembler.toCollectionModel(cities);
     }
 
     @GetMapping("/{cityId}")
-    public City findById(@PathVariable Long cityId) {
-        return cityService.findById(cityId);
+    public CityModel findById(@PathVariable Long cityId) {
+        City city = cityService.findById(cityId);
+        return cityModelAssembler.toModel(city);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public City create(@RequestBody @Valid City city) {
+    public CityModel create(@RequestBody @Valid CityInput cityInput) {
         try {
-            return cityService.save(city);    
+            City city = cityInputDisassembler.toDomainObject(cityInput);
+            city = cityService.save(city);
+            return cityModelAssembler.toModel(city);
         } catch (StateNotFoundException e) {
-            throw new BusinessException(e.getMessage());
+            throw new BusinessException(e.getMessage(), e);
         }
     }
 
     @PutMapping("/{cityId}")
-    public City update(@PathVariable Long cityId, @RequestBody @Valid City city) {
-        City found = cityService.findById(cityId);
-        BeanUtils.copyProperties(city, found, "id");
+    public CityModel update(@PathVariable Long cityId, @RequestBody @Valid CityInput cityInput) {
         try {
-            return cityService.save(found);    
-        } catch (StateNotFoundException e) {
-            throw new BusinessException(e.getMessage());
+            City cityFound = cityService.findById(cityId);
+            cityInputDisassembler.copyToDomainObject(cityInput, cityFound);
+            cityFound = cityService.save(cityFound);
+            return cityModelAssembler.toModel(cityFound);
+        } catch (EntityNotFoundException e) {
+            throw new BusinessException(e.getMessage(), e);
         }
+        
     }
 
     @DeleteMapping("/{cityId}")

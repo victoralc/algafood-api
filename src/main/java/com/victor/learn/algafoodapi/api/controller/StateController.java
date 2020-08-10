@@ -1,5 +1,9 @@
 package com.victor.learn.algafoodapi.api.controller;
 
+import com.victor.learn.algafoodapi.api.model.StateModel;
+import com.victor.learn.algafoodapi.api.model.assembler.StateInputDisassembler;
+import com.victor.learn.algafoodapi.api.model.assembler.StateModelAssembler;
+import com.victor.learn.algafoodapi.api.model.input.state.StateInput;
 import com.victor.learn.algafoodapi.domain.exception.EntityInUseException;
 import com.victor.learn.algafoodapi.domain.exception.StateNotFoundException;
 import com.victor.learn.algafoodapi.domain.model.State;
@@ -25,45 +29,44 @@ import java.util.List;
 public class StateController {
 
     @Autowired
-    private StateService service;
+    private StateService stateService;
+    
+    @Autowired
+    private StateModelAssembler stateModelAssembler;
+    
+    @Autowired
+    private StateInputDisassembler stateInputDisassembler;
 
     @GetMapping
-    public List<State> list() {
-        return this.service.listAll();
+    public List<StateModel> list() {
+        List<State> states = this.stateService.listAll();
+        return stateModelAssembler.toCollectionModel(states);
     }
 
     @GetMapping("/{stateId}")
-    public ResponseEntity<?> findById(@PathVariable Long stateId) {
-        try {
-            State found = service.findById(stateId);
-            return ResponseEntity.ok(found);
-        } catch (StateNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public StateModel findById(@PathVariable Long stateId) {
+        State stateFound = stateService.findById(stateId);
+        return stateModelAssembler.toModel(stateFound);
     }
 
     @PostMapping
-    public ResponseEntity<State> create(@RequestBody @Valid State state) {
-        state = service.create(state);
-        return ResponseEntity.status(HttpStatus.CREATED).body(state);
+    public StateModel create(@RequestBody @Valid StateInput stateInput) {
+        State state = stateInputDisassembler.toDomainObject(stateInput);
+        state = stateService.create(state);
+        return stateModelAssembler.toModel(state);
     }
 
     @PutMapping("/{stateId}")
-    public ResponseEntity<?> update(@PathVariable Long stateId, @RequestBody @Valid State state) {
-        try {
-            State found = service.findById(stateId);
-            BeanUtils.copyProperties(state, found, "id");
-            State updated = service.create(found);
-            return ResponseEntity.ok(updated);
-        } catch (StateNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public StateModel update(@PathVariable Long stateId, @RequestBody @Valid StateInput stateInput) {
+        State stateFound = stateService.findById(stateId);
+        stateInputDisassembler.copyToDomainObject(stateInput, stateFound);
+        return stateModelAssembler.toModel(stateFound);
     }
 
     @DeleteMapping("/{estadoId}")
     public ResponseEntity<State> remove(@PathVariable Long estadoId) {
         try {
-            service.remove(estadoId);
+            stateService.remove(estadoId);
             return ResponseEntity.noContent().build();
         } catch (EntityInUseException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

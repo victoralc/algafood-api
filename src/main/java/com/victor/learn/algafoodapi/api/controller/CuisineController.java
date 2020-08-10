@@ -1,5 +1,10 @@
 package com.victor.learn.algafoodapi.api.controller;
 
+import com.victor.learn.algafoodapi.api.model.CuisineModel;
+import com.victor.learn.algafoodapi.api.model.assembler.CuisineInputDisassembler;
+import com.victor.learn.algafoodapi.api.model.assembler.CuisineModelAssembler;
+import com.victor.learn.algafoodapi.api.model.input.cuisine.CuisineInput;
+import com.victor.learn.algafoodapi.domain.exception.EntityNotFoundException;
 import com.victor.learn.algafoodapi.domain.model.Cuisine;
 import com.victor.learn.algafoodapi.domain.repository.CuisineRepository;
 import com.victor.learn.algafoodapi.domain.service.CuisineService;
@@ -31,41 +36,52 @@ public class CuisineController {
     @Autowired
     private CuisineService cuisineService;
 
+    @Autowired
+    private CuisineModelAssembler cuisineModelAssembler;
+
+    @Autowired
+    private CuisineInputDisassembler cuisineInputDisassembler;
+
     @GetMapping
-    public List<Cuisine> list() {
-        return cuisineRepository.findAll();
+    public List<CuisineModel> list() {
+        List<Cuisine> cuisines = cuisineRepository.findAll();
+        return cuisineModelAssembler.toCollectionModel(cuisines);
     }
 
     @GetMapping("/{cuisineId}")
-    public Cuisine find(@PathVariable("cuisineId") Long id) {
-        return cuisineService.findById(id);
+    public CuisineModel find(@PathVariable("cuisineId") Long id) {
+        Cuisine cuisine = cuisineService.findById(id);
+        return cuisineModelAssembler.toModel(cuisine);
     }
 
     @GetMapping("/by-name/{cuisineName}")
-    public ResponseEntity<Cuisine> findByName(@PathVariable("cuisineName") String cuisineName) {
+    public CuisineModel findByName(@PathVariable("cuisineName") String cuisineName) {
         Optional<Cuisine> cuisine = cuisineRepository.findByNameContaining(cuisineName);
         if (cuisine.isPresent()) {
-            return ResponseEntity.ok(cuisine.get());
+            return cuisineModelAssembler.toModel(cuisine.get());
         }
-        return ResponseEntity.notFound().build();
+        throw new EntityNotFoundException("City not found with name " + cuisineName);
     }
 
     @PostMapping
-    public ResponseEntity<Cuisine> create(@RequestBody @Valid Cuisine cuisine) {
-        Cuisine created = cuisineService.save(cuisine);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    @ResponseStatus(HttpStatus.CREATED)
+    public CuisineModel create(@RequestBody @Valid CuisineInput cuisineInput) {
+        Cuisine cuisine = cuisineInputDisassembler.toDomainObject(cuisineInput);
+        cuisine = cuisineService.save(cuisine);
+        return cuisineModelAssembler.toModel(cuisine);
     }
 
     @PutMapping("/{cuisineId}")
-    public Cuisine update(@PathVariable Long cuisineId, @RequestBody @Valid Cuisine cuisine) {
+    public CuisineModel update(@PathVariable Long cuisineId, @RequestBody @Valid CuisineInput cuisineInput) {
         Cuisine actual = cuisineService.findById(cuisineId);
-        BeanUtils.copyProperties(cuisine, actual, "id");
-        return cuisineRepository.save(actual);
+        cuisineInputDisassembler.copyToDomainObject(cuisineInput, actual);
+        actual = cuisineRepository.save(actual);
+        return cuisineModelAssembler.toModel(actual);
     }
 
     @DeleteMapping("/{cuisineId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remove(@PathVariable Long cuisineId) { 
+    public void remove(@PathVariable Long cuisineId) {
         cuisineService.remove(cuisineId);
     }
 
