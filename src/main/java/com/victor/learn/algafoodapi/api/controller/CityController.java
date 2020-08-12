@@ -72,7 +72,6 @@ public class CityController {
         } catch (EntityNotFoundException e) {
             throw new BusinessException(e.getMessage(), e);
         }
-        
     }
 
     @DeleteMapping("/{cityId}")
