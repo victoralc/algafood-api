@@ -5,6 +5,8 @@ import com.victor.learn.algafoodapi.api.model.RestaurantModel;
 import com.victor.learn.algafoodapi.api.model.assembler.RestaurantModelAssembler;
 import com.victor.learn.algafoodapi.api.model.input.restaurant.RestaurantInput;
 import com.victor.learn.algafoodapi.domain.exception.BusinessException;
+import com.victor.learn.algafoodapi.domain.exception.CityNotFoundException;
+import com.victor.learn.algafoodapi.domain.exception.CuisineNotFoundException;
 import com.victor.learn.algafoodapi.domain.exception.EntityNotFoundException;
 import com.victor.learn.algafoodapi.domain.model.Restaurant;
 import com.victor.learn.algafoodapi.domain.repository.RestaurantRepository;
@@ -12,14 +14,7 @@ import com.victor.learn.algafoodapi.domain.service.RestaurantService;
 import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -70,7 +65,7 @@ public class RestaurantController {
         restaurantInputDisassembler.copyToDomainObject(restaurantInput, actual);
         try {
             return restaurantModelAssembler.toModel(restaurantService.save(actual));
-        } catch (EntityNotFoundException e) {
+        } catch (CuisineNotFoundException | CityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }
@@ -82,5 +77,17 @@ public class RestaurantController {
             return ResponseEntity.ok(restaurants);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{restaurantId}/active")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void activate(@PathVariable Long restaurantId) {
+        restaurantService.activate(restaurantId);
+    }
+
+    @DeleteMapping("/{restaurantId}/inactive")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inactivate(@PathVariable Long restaurantId) {
+        restaurantService.inactivate(restaurantId);
     }
 }

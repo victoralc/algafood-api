@@ -39,6 +39,7 @@ public class StateService {
     public void remove(Long stateId) {
         try {
             stateRepository.deleteById(stateId);
+            stateRepository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(String.format(MSG_ESTADO_EM_USO, stateId));
         } catch (EmptyResultDataAccessException e) {

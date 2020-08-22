@@ -33,6 +33,7 @@ public class CuisineService {
     public void remove(Long cuisineId) {
         try {
             cuisineRepository.deleteById(cuisineId);
+            cuisineRepository.flush();
         } catch (EmptyResultDataAccessException e) {
             throw new CuisineNotFoundException(cuisineId);
         } catch (DataIntegrityViolationException e) {

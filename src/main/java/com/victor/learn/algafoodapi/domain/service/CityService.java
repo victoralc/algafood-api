@@ -45,6 +45,7 @@ public class CityService {
     public void remover(Long cityId) {
         try {
             cityRepository.deleteById(cityId);
+            cityRepository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(String.format(MSG_CIDADE_EM_USO_EXCEPTION, cityId));
         } catch (EmptyResultDataAccessException e) {

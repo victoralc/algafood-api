@@ -1,6 +1,7 @@
 package com.victor.learn.algafoodapi.api.model.assembler;
 
 import com.victor.learn.algafoodapi.api.model.input.restaurant.RestaurantInput;
+import com.victor.learn.algafoodapi.domain.model.City;
 import com.victor.learn.algafoodapi.domain.model.Cuisine;
 import com.victor.learn.algafoodapi.domain.model.Restaurant;
 import org.modelmapper.ModelMapper;
@@ -21,6 +22,9 @@ public class RestaurantInputDisassembler {
     
     public void copyToDomainObject(RestaurantInput restaurantInput, Restaurant restaurant) {
         restaurant.setCuisine(new Cuisine());
+        if (restaurant.getAddress() != null) {
+            restaurant.getAddress().setCity(new City());
+        }
         modelMapper.map(restaurantInput, restaurant);
     }
 
