@@ -1,12 +1,10 @@
 package com.victor.learn.algafoodapi.domain.service;
 
 import com.victor.learn.algafoodapi.domain.exception.RestaurantNotFoundException;
-import com.victor.learn.algafoodapi.domain.model.City;
-import com.victor.learn.algafoodapi.domain.model.Cuisine;
+import com.victor.learn.algafoodapi.domain.model.PaymentType;
 import com.victor.learn.algafoodapi.domain.model.Restaurant;
 import com.victor.learn.algafoodapi.domain.repository.RestaurantRepository;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +14,13 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final CuisineService cuisineService;
     private final CityService cityService;
+    private final PaymentTypeService paymentTypeService;
 
-    public RestaurantService(RestaurantRepository restaurantRepository, CuisineService cuisineService, CityService cityService) {
+    public RestaurantService(RestaurantRepository restaurantRepository, CuisineService cuisineService, CityService cityService, PaymentTypeService paymentTypeService) {
         this.restaurantRepository = restaurantRepository;
         this.cuisineService = cuisineService;
         this.cityService = cityService;
+        this.paymentTypeService = paymentTypeService;
     }
 
     public Restaurant findOrFail(Long restaurantId) {
@@ -52,6 +52,20 @@ public class RestaurantService {
     public void inactivate(Long restaurantId) {
         Restaurant restaurant = findOrFail(restaurantId);
         restaurant.inactivate();
+    }
+
+    @Transactional
+    public void disassociatePaymentTypes(Long restaurantId, Long paymentTypeId) {
+        Restaurant restaurant = findOrFail(restaurantId);
+        final PaymentType paymentType = paymentTypeService.findById(paymentTypeId);
+        restaurant.removePaymentType(paymentType);
+    }
+
+    @Transactional
+    public void associatePaymentTypes(Long restaurantId, Long paymentTypeId) {
+        Restaurant restaurant = findOrFail(restaurantId);
+        final PaymentType paymentType = paymentTypeService.findById(paymentTypeId);
+        restaurant.addPaymentType(paymentType);
     }
 
 }

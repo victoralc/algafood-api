@@ -23,7 +23,8 @@ public class UserController {
     private final UserModelAssembler userModelAssembler;
     private final UserInputDisassembler userInputDisassembler;
 
-    public UserController(UserRepository userRepository, UserService userService, UserModelAssembler userModelAssembler, UserInputDisassembler userInputDisassembler) {
+    public UserController(UserRepository userRepository, UserService userService,
+                          UserModelAssembler userModelAssembler, UserInputDisassembler userInputDisassembler) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.userModelAssembler = userModelAssembler;

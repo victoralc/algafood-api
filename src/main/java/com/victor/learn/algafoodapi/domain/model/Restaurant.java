@@ -9,17 +9,7 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -29,11 +19,13 @@ import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@DeliveryTaxFreeOnDescription(fieldValue = "deliveryTax", 
-                              fieldDescription = "name", 
-                              requiredDescription = "Delivery Tax Free")
+@DeliveryTaxFreeOnDescription(fieldValue = "deliveryTax",
+        fieldDescription = "name",
+        requiredDescription = "Delivery Tax Free")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -43,7 +35,7 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
-    
+
     @NotBlank
     @Column(nullable = false)
     private String name;
@@ -52,7 +44,7 @@ public class Restaurant {
     @PositiveOrZero
     @Column(name = "delivery_tax", nullable = false)
     private BigDecimal deliveryTax;
-    
+
     @JsonIgnoreProperties(value = "name", allowGetters = true)
     @Valid
     @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
@@ -66,20 +58,20 @@ public class Restaurant {
     @JoinTable(name = "restaurant_payment_type",
             joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "payment_type_id"))
-    private List<PaymentType> paymentTypes = new ArrayList<>();
+    private Set<PaymentType> paymentTypes = new HashSet<>();
 
     @JsonIgnore
     @Embedded
     private Address address;
-    
+
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
     private OffsetDateTime registerDate;
 
     @UpdateTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private OffsetDateTime  updateDate;
-    
+    private OffsetDateTime updateDate;
+
     @JsonIgnore
     @OneToMany(mappedBy = "restaurant")
     private List<Product> products = new ArrayList<>();
@@ -93,4 +85,13 @@ public class Restaurant {
     public void inactivate() {
         setActive(false);
     }
+
+    public boolean removePaymentType(PaymentType paymentType) {
+        return this.paymentTypes.remove(paymentType);
+    }
+
+    public boolean addPaymentType(PaymentType paymentType) {
+        return this.paymentTypes.add(paymentType);
+    }
+
 }

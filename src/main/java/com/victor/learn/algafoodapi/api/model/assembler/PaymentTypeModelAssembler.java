@@ -5,6 +5,7 @@ import com.victor.learn.algafoodapi.domain.model.PaymentType;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -22,7 +23,7 @@ public class PaymentTypeModelAssembler {
         return this.modelMapper.map(paymentType, PaymentTypeModel.class);
     }
 
-    public List<PaymentTypeModel> toCollectionModel(List<PaymentType> paymentTypes) {
+    public List<PaymentTypeModel> toCollectionModel(Collection<PaymentType> paymentTypes) {
         return paymentTypes.stream().map(paymentType -> toModel(paymentType)).collect(toList());
     }
 

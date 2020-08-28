@@ -26,7 +26,7 @@ public class UserService {
 
     @Transactional
     public User save(User user) {
-        userRepository.detach(user);
+        //userRepository.detach(user);
         final Optional<User> userExistent = userRepository.findByEmail(user.getEmail());
         if (userExistent.isPresent() && !userExistent.get().equals(user)) {
             throw new BusinessException(String.format("User with email %s already exist", user.getEmail()));
