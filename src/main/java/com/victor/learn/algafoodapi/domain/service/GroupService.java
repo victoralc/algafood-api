@@ -3,12 +3,9 @@ package com.victor.learn.algafoodapi.domain.service;
 import com.victor.learn.algafoodapi.domain.exception.CityNotFoundException;
 import com.victor.learn.algafoodapi.domain.exception.EntityInUseException;
 import com.victor.learn.algafoodapi.domain.exception.GroupNotFoundException;
-import com.victor.learn.algafoodapi.domain.model.City;
 import com.victor.learn.algafoodapi.domain.model.Group;
-import com.victor.learn.algafoodapi.domain.model.State;
-import com.victor.learn.algafoodapi.domain.repository.CityRepository;
+import com.victor.learn.algafoodapi.domain.model.Permission;
 import com.victor.learn.algafoodapi.domain.repository.GroupRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -23,9 +20,11 @@ public class GroupService {
             = "Group with code %d cannot be removed because it is already been used.";
 
     private final GroupRepository groupRepository;
+    private final PermissionService permissionService;
 
-    public GroupService(GroupRepository groupRepository) {
+    public GroupService(GroupRepository groupRepository, PermissionService permissionService) {
         this.groupRepository = groupRepository;
+        this.permissionService = permissionService;
     }
 
     public List<Group> listAll() {
@@ -52,6 +51,20 @@ public class GroupService {
         } catch (EmptyResultDataAccessException e) {
             throw new CityNotFoundException(groupId);
         }
+    }
+
+    @Transactional
+    public void removePermission(Long groupId, Long permissionId) {
+        final Group group = findById(groupId);
+        final Permission permission = permissionService.findOrFail(permissionId);
+        group.removePermission(permission);
+    }
+
+    @Transactional
+    public void givePermission(Long groupId, Long permissionId) {
+        Group group = findById(groupId);
+        final Permission permission = permissionService.findOrFail(permissionId);
+        group.addPermission(permission);
     }
 
 }

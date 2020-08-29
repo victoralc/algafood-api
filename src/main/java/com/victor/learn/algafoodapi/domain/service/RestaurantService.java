@@ -68,4 +68,16 @@ public class RestaurantService {
         restaurant.addPaymentType(paymentType);
     }
 
+    @Transactional
+    public void open(Long restaurantId) {
+        final Restaurant restaurant = findOrFail(restaurantId);
+        restaurant.open();
+    }
+
+    @Transactional
+    public void close(Long restaurantId) {
+        final Restaurant restaurant = findOrFail(restaurantId);
+        restaurant.close();
+    }
+
 }

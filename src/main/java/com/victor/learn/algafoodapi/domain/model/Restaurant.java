@@ -78,6 +78,8 @@ public class Restaurant {
 
     private Boolean active = Boolean.TRUE;
 
+    private Boolean open = Boolean.FALSE;
+
     public void activate() {
         setActive(true);
     }
@@ -94,4 +96,11 @@ public class Restaurant {
         return this.paymentTypes.add(paymentType);
     }
 
+    public void open(){
+        setOpen(true);
+    }
+
+    public void close(){
+        setOpen(false);
+    }
 }

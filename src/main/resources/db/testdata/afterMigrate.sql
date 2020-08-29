@@ -43,19 +43,19 @@ insert into city (id, name, state_id) values (5, 'Fortaleza', 3);
 insert into tbl_group (name) values ('Manager'), ('Salesman'), ('Secretary'), ('Register');
 
 insert into restaurant (id, name, delivery_tax, cuisine_id, register_date, update_date, address_city_id, address_zipcode,
-                        address_name, address_number, address_neighbour, active)
+                        address_name, address_number, address_neighbour, active, open)
                         values (1, 'Thai Gourmet', 10, 1, utc_timestamp, utc_timestamp, 1,
-                                '38400-999', 'Rua João Pinheiro', '1000', 'Centro', 1);
-insert into restaurant (id, name, delivery_tax, cuisine_id, register_date, update_date, active)
-    values (2, 'Thai Delivery', 9.50, 1, utc_timestamp, utc_timestamp, 1);
-insert into restaurant (id, name, delivery_tax, cuisine_id, register_date, update_date, active)
-    values (3, 'Tuk Tuk Comida Indiana', 15, 2, utc_timestamp, utc_timestamp, 1);
-insert into restaurant (id, name, delivery_tax, cuisine_id, register_date, update_date, active)
-    values (4, 'Java Steakhouse', 12, 3, utc_timestamp, utc_timestamp, 1);
-insert into restaurant (id, name, delivery_tax, cuisine_id, register_date, update_date, active)
-    values (5, 'Lanchonete do Tio Sam', 11, 4, utc_timestamp, utc_timestamp, 1);
-insert into restaurant (id, name, delivery_tax, cuisine_id, register_date, update_date, active)
-    values (6, 'Bar da Maria', 6, 4, utc_timestamp, utc_timestamp, 1);
+                                '38400-999', 'Rua João Pinheiro', '1000', 'Centro', true, true);
+insert into restaurant (id, name, delivery_tax, cuisine_id, register_date, update_date, active, open)
+    values (2, 'Thai Delivery', 9.50, 1, utc_timestamp, utc_timestamp, true, true);
+insert into restaurant (id, name, delivery_tax, cuisine_id, register_date, update_date, active, open)
+    values (3, 'Tuk Tuk Comida Indiana', 15, 2, utc_timestamp, utc_timestamp, true, true);
+insert into restaurant (id, name, delivery_tax, cuisine_id, register_date, update_date, active, open)
+    values (4, 'Java Steakhouse', 12, 3, utc_timestamp, utc_timestamp, true, true);
+insert into restaurant (id, name, delivery_tax, cuisine_id, register_date, update_date, active, open)
+    values (5, 'Lanchonete do Tio Sam', 11, 4, utc_timestamp, utc_timestamp, true, true);
+insert into restaurant (id, name, delivery_tax, cuisine_id, register_date, update_date, active, open)
+    values (6, 'Bar da Maria', 6, 4, utc_timestamp, utc_timestamp, true, true);
 
 insert into payment_type (id, description) values (1, 'Cartão de crédito');
 insert into payment_type (id, description) values (2, 'Cartão de débito');
@@ -103,3 +103,4 @@ insert into user (id, name, email, password, creation_date) values
 (4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp);
 
 insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);
+
