@@ -12,6 +12,7 @@ delete from restaurant;
 delete from restaurant_payment_type;
 delete from user;
 delete from user_group;
+delete from restaurant_user_responsible;
 
 set foreign_key_checks = 1;
 
@@ -100,7 +101,10 @@ insert into user (id, name, email, password, creation_date) values
 (1, 'Victor Alcantara', 'victoralcantara432@gmail.com', '123', utc_timestamp),
 (2, 'Maria Joaquina', 'maria.vnd@algafood.com', '123', utc_timestamp),
 (3, 'José Souza', 'jose.aux@algafood.com', '123', utc_timestamp),
-(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp);
+(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp),
+(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp);
+
+insert into restaurant_user_responsible (restaurant_id, user_id) values (1, 5), (3, 5);
 
 insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);
 

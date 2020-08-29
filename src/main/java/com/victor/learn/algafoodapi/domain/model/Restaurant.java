@@ -76,6 +76,20 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant")
     private List<Product> products = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(name = "restaurant_user_responsible",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> responsible = new HashSet<>();
+
+    public boolean removeResponsible(User user) {
+        return getResponsible().remove(user);
+    }
+
+    public boolean addResponsible(User user) {
+        return getResponsible().add(user);
+    }
+
     private Boolean active = Boolean.TRUE;
 
     private Boolean open = Boolean.FALSE;
