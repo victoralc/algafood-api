@@ -15,6 +15,9 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class RestaurantInput {
+
+    @NotNull
+    private Long id;
     
     @NotBlank
     private String name;

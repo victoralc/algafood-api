@@ -37,7 +37,7 @@ create table product
     name           varchar(80)    not null,
     description    text           not null,
     price          decimal(10, 2) not null,
-    isActive       tinyint(1)     not null,
+    active       tinyint(1)     not null,
 
     primary key (id)
 ) engine = InnoDB
@@ -53,11 +53,11 @@ create table restaurant
     register_date     datetime       not null,
 
     address_city_id    bigint,
-    address_zipcode    varchar(9),
-    address_name       varchar(100),
-    address_number     varchar(20),
-    address_additional varchar(60),
-    address_neighbour  varchar(60),
+    address_postal_code varchar(9),
+    address_street      varchar(100),
+    address_number      varchar(20),
+    address_additional  varchar(60),
+    address_neighbour   varchar(60),
 
     primary key (id)
 ) engine = InnoDB

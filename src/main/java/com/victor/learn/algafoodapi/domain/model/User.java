@@ -40,7 +40,7 @@ public class User {
 
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private OffsetDateTime registerDate;
+    private OffsetDateTime creationDate;
 
     @ManyToMany
     @JoinTable(name = "user_group", joinColumns = @JoinColumn(name = "user_id"),

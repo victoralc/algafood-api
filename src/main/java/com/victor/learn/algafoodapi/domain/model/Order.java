@@ -1,5 +1,6 @@
 package com.victor.learn.algafoodapi.domain.model;
 
+import com.victor.learn.algafoodapi.api.model.input.order.OrderInput;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -51,12 +52,17 @@ public class Order {
     @JoinColumn(name = "user_customer_id", nullable = false)
     private User customer;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
 
     public void calculateTotal(){
-        this.subtotal = getItems().stream().map(orderItem -> orderItem.getTotalPrice())
+        getItems().forEach(OrderItem::calculateTotalPrice);
+
+        this.subtotal = getItems().stream()
+                .map(item -> item.getTotalPrice())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.total = this.subtotal.add(this.deliveryTax);
     }
 
     public void configureDeliveryTax(){

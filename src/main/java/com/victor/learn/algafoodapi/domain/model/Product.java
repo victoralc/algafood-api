@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.math.BigDecimal;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -28,10 +29,10 @@ public class Product {
     private String description;
 
     @Column(nullable = false)
-    private String price;
+    private BigDecimal price;
 
     @Column(nullable = false)
-    private boolean isActive;
+    private boolean active;
     
     @ManyToOne
     @JoinColumn(nullable = false)

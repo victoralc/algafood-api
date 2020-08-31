@@ -12,11 +12,11 @@ import javax.persistence.ManyToOne;
 @Embeddable
 public class Address {
     
-    @Column(name = "address_zipcode")
-    private String zipCode;
+    @Column(name = "address_postal_code")
+    private String postalCode;
 
-    @Column(name = "address_name")
-    private String address;
+    @Column(name = "address_street")
+    private String street;
 
     @Column(name = "address_number")
     private String number;

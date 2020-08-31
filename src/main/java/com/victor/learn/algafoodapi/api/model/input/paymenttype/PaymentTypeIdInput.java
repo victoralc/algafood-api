@@ -8,12 +8,9 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class PaymentTypeInput {
+public class PaymentTypeIdInput {
 
     @NotNull
     private Long id;
-
-    @NotBlank
-    private String description;
 
 }
