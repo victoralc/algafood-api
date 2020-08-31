@@ -4,15 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -37,7 +29,8 @@ public class Order {
     @Embedded
     private Address deliveryAddress;
 
-    private OrderStatus status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status = OrderStatus.CREATED;
 
     @CreationTimestamp
     private OffsetDateTime creationDate;
@@ -60,5 +53,18 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> items = new ArrayList<>();
+
+    public void calculateTotal(){
+        this.subtotal = getItems().stream().map(orderItem -> orderItem.getTotalPrice())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void configureDeliveryTax(){
+        setDeliveryTax(getRestaurant().getDeliveryTax());
+    }
+
+    public void configureOrderItems() {
+        getItems().forEach(item -> item.setOrder(this));
+    }
 
 }

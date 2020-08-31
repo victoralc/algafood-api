@@ -117,4 +117,12 @@ public class Restaurant {
     public void close(){
         setOpen(false);
     }
+
+    public boolean acceptPaymentType(PaymentType paymentType){
+        return getPaymentTypes().contains(paymentType);
+    }
+
+    public boolean notAcceptPaymentType(PaymentType paymentType){
+        return !acceptPaymentType(paymentType);
+    }
 }
