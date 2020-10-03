@@ -1,9 +1,11 @@
 package com.victor.learn.algafoodapi.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.victor.learn.algafoodapi.api.model.assembler.RestaurantInputDisassembler;
 import com.victor.learn.algafoodapi.api.model.RestaurantModel;
 import com.victor.learn.algafoodapi.api.model.assembler.RestaurantModelAssembler;
 import com.victor.learn.algafoodapi.api.model.input.restaurant.RestaurantInput;
+import com.victor.learn.algafoodapi.api.model.view.RestaurantView;
 import com.victor.learn.algafoodapi.domain.exception.BusinessException;
 import com.victor.learn.algafoodapi.domain.exception.CityNotFoundException;
 import com.victor.learn.algafoodapi.domain.exception.CuisineNotFoundException;
@@ -14,6 +16,7 @@ import com.victor.learn.algafoodapi.domain.service.RestaurantService;
 import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,11 +39,36 @@ public class RestaurantController {
         this.restaurantInputDisassembler = restaurantInputDisassembler;
     }
 
+    @JsonView(RestaurantView.Short.class)
     @GetMapping
-    public List<RestaurantModel> listAll() {
+    public List<RestaurantModel> list() {
         List<Restaurant> restaurants = restaurantRepository.findAll();
         return restaurantModelAssembler.toCollectionModel(restaurants);
     }
+
+    @JsonView(RestaurantView.OnlyName.class)
+    @GetMapping(params = "view=only-name")
+    public List<RestaurantModel> listRestaurantOnlyWithName() {
+        List<Restaurant> restaurants = restaurantRepository.findAll();
+        return restaurantModelAssembler.toCollectionModel(restaurants);
+    }
+
+    /*@GetMapping
+    public MappingJacksonValue listAll(@RequestParam(required = false) String view) {
+        List<Restaurant> restaurants = restaurantRepository.findAll();
+        List<RestaurantModel> restaurantModel = restaurantModelAssembler.toCollectionModel(restaurants);
+
+        MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(restaurantModel);
+        mappingJacksonValue.setSerializationView(RestaurantView.Short.class);
+
+        if ("only-name".equals(view)) {
+            mappingJacksonValue.setSerializationView(RestaurantView.OnlyName.class);
+        } else if ("all-fields".equals(view)) {
+            mappingJacksonValue.setSerializationView(null);
+        }
+
+        return mappingJacksonValue;
+    }*/
 
     @GetMapping("/{restaurantId}")
     public RestaurantModel findById(@PathVariable Long restaurantId) {

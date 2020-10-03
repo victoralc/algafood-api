@@ -1,9 +1,11 @@
 package com.victor.learn.algafoodapi.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.victor.learn.algafoodapi.api.model.CuisineModel;
 import com.victor.learn.algafoodapi.api.model.assembler.CuisineInputDisassembler;
 import com.victor.learn.algafoodapi.api.model.assembler.CuisineModelAssembler;
 import com.victor.learn.algafoodapi.api.model.input.cuisine.CuisineInput;
+import com.victor.learn.algafoodapi.api.model.view.RestaurantView;
 import com.victor.learn.algafoodapi.domain.exception.EntityNotFoundException;
 import com.victor.learn.algafoodapi.domain.model.Cuisine;
 import com.victor.learn.algafoodapi.domain.repository.CuisineRepository;
