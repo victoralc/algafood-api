@@ -1,5 +1,6 @@
 package com.victor.learn.algafoodapi.api.model;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.victor.learn.algafoodapi.domain.model.Order;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonFilter("orderFilter")
 @Getter
 @Setter
 public class OrderShortModel {

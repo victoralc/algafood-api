@@ -1,5 +1,7 @@
 package com.victor.learn.algafoodapi.api.controller;
 
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.victor.learn.algafoodapi.api.model.OrderModel;
 import com.victor.learn.algafoodapi.api.model.OrderShortModel;
 import com.victor.learn.algafoodapi.api.model.assembler.OrderInputDisassembler;
@@ -13,6 +15,8 @@ import com.victor.learn.algafoodapi.domain.model.User;
 import com.victor.learn.algafoodapi.domain.repository.OrderRepository;
 import com.victor.learn.algafoodapi.domain.service.OrderService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,10 +40,29 @@ public class OrderController {
         this.orderInputDisassembler = orderInputDisassembler;
     }
 
-    @GetMapping
+    /*@GetMapping
     public List<OrderShortModel> list() {
         final List<Order> orders = orderRepository.findAll();
         return orderShortModelAssembler.toCollectionModel(orders);
+    }*/
+
+    @GetMapping
+    public MappingJacksonValue list(@RequestParam(required = false) String fields) {
+        final List<Order> orders = orderRepository.findAll();
+        final List<OrderShortModel> orderShortModels = orderShortModelAssembler.toCollectionModel(orders);
+
+        MappingJacksonValue jacksonViewWrapper = new MappingJacksonValue(orderShortModels);
+
+        SimpleFilterProvider simpleFilterProvider = new SimpleFilterProvider();
+        simpleFilterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.serializeAll());
+
+        if (StringUtils.hasText(fields)) {
+            simpleFilterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.filterOutAllExcept(fields.split(",")));
+        }
+
+        jacksonViewWrapper.setFilters(simpleFilterProvider);
+
+        return jacksonViewWrapper;
     }
 
     @GetMapping("/{orderId}")
