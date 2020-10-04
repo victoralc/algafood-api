@@ -13,6 +13,8 @@ import com.victor.learn.algafoodapi.domain.exception.EntityNotFoundException;
 import com.victor.learn.algafoodapi.domain.model.Order;
 import com.victor.learn.algafoodapi.domain.model.User;
 import com.victor.learn.algafoodapi.domain.repository.OrderRepository;
+import com.victor.learn.algafoodapi.domain.repository.filter.OrderFilter;
+import com.victor.learn.algafoodapi.domain.repository.specs.OrderSpecs;
 import com.victor.learn.algafoodapi.domain.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -40,13 +42,13 @@ public class OrderController {
         this.orderInputDisassembler = orderInputDisassembler;
     }
 
-    /*@GetMapping
-    public List<OrderShortModel> list() {
-        final List<Order> orders = orderRepository.findAll();
-        return orderShortModelAssembler.toCollectionModel(orders);
-    }*/
-
     @GetMapping
+    public List<OrderShortModel> search(OrderFilter filter) {
+        final List<Order> orders = orderRepository.findAll(OrderSpecs.usingFilter(filter));
+        return orderShortModelAssembler.toCollectionModel(orders);
+    }
+
+    /*@GetMapping
     public MappingJacksonValue list(@RequestParam(required = false) String fields) {
         final List<Order> orders = orderRepository.findAll();
         final List<OrderShortModel> orderShortModels = orderShortModelAssembler.toCollectionModel(orders);
@@ -63,7 +65,7 @@ public class OrderController {
         jacksonViewWrapper.setFilters(simpleFilterProvider);
 
         return jacksonViewWrapper;
-    }
+    }*/
 
     @GetMapping("/{orderId}")
     public OrderModel find(@PathVariable Long orderId) {

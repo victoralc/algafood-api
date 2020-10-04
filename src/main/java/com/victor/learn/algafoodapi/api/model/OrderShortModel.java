@@ -10,7 +10,6 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonFilter("orderFilter")
 @Getter
 @Setter
 public class OrderShortModel {
@@ -23,6 +22,6 @@ public class OrderShortModel {
     private OffsetDateTime creationDate;
     private OffsetDateTime deliveryDate;
     private RestaurantShortModel restaurant;
-    private UserModel client;
+    private UserModel customer;
 
 }

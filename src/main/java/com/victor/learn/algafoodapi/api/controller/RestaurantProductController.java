@@ -47,10 +47,18 @@ public class RestaurantProductController {
     }
 
     @GetMapping
-    public List<ProductModel> listAll(@PathVariable Long restaurantId) {
+    public List<ProductModel> listAll(@PathVariable Long restaurantId, @RequestParam(required = false) boolean includeInactive) {
+
         final Restaurant restaurant = restaurantService.findOrFail(restaurantId);
-        final List<Product> products = productRepository.findByRestaurant(restaurant);
-        return productModelAssembler.toCollectionModel(products);
+
+        List<Product> allProducts = null;
+        if (includeInactive) {
+            allProducts = productRepository.findByRestaurant(restaurant);
+        } else {
+            allProducts = productRepository.findActivesByRestaurant(restaurant);
+        }
+
+        return productModelAssembler.toCollectionModel(allProducts);
     }
 
     @GetMapping("/{productId}")
